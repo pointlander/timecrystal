@@ -17,35 +17,40 @@ func main() {
 
 	qsim := q.New()
 
-	q0 := qsim.Zero()
-	q1 := qsim.One()
-	q2 := qsim.Zero()
-	q3 := qsim.One()
+	init := []string{"0", "1", "0", "1"}
+	q := []q.Qubit{}
+	for _, state := range init {
+		if state == "0" {
+			q = append(q, qsim.Zero())
+		} else {
+			q = append(q, qsim.One())
+		}
+	}
 
 	// https://arxiv.org/abs/2105.06632
 	period := func() {
 		e := .5
-		qsim.RY(math.Pi-e, q0)
-		qsim.RY(math.Pi-e, q1)
-		qsim.RY(math.Pi-e, q2)
-		qsim.RY(math.Pi-e, q3)
+		qsim.RY(math.Pi-e, q[0])
+		qsim.RY(math.Pi-e, q[1])
+		qsim.RY(math.Pi-e, q[2])
+		qsim.RY(math.Pi-e, q[3])
 
-		qsim.CNOT(q0, q1)
-		qsim.CNOT(q2, q3)
+		qsim.CNOT(q[0], q[1])
+		qsim.CNOT(q[2], q[3])
 
 		j := func() float64 {
 			return math.Pi * (1.0 + 3*rand.Float64()) / 8
 		}
-		qsim.RZ(-2*j(), q1)
-		qsim.RZ(-2*j(), q3)
+		qsim.RZ(-2*j(), q[1])
+		qsim.RZ(-2*j(), q[3])
 
-		qsim.CNOT(q0, q1)
-		qsim.CNOT(q2, q3)
-		qsim.CNOT(q1, q2)
+		qsim.CNOT(q[0], q[1])
+		qsim.CNOT(q[2], q[3])
+		qsim.CNOT(q[1], q[2])
 
-		qsim.RZ(-2*j(), q2)
+		qsim.RZ(-2*j(), q[2])
 
-		qsim.CNOT(q1, q2)
+		qsim.CNOT(q[1], q[2])
 	}
 	for i := 0; i < 8; i++ {
 		period()
