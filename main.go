@@ -17,10 +17,10 @@ func main() {
 
 	qsim := q.New()
 
-	init := []string{"0", "1", "0", "1"}
+	init := "0101"
 	q := []q.Qubit{}
 	for _, state := range init {
-		if state == "0" {
+		if state == '0' {
 			q = append(q, qsim.Zero())
 		} else {
 			q = append(q, qsim.One())
@@ -52,6 +52,7 @@ func main() {
 
 		qsim.CNOT(q[1], q[2])
 	}
+	sum, last, count := 0.0, -1, 0.0
 	for i := 0; i < 8; i++ {
 		period()
 		max, binary := 0.0, []string{}
@@ -60,6 +61,12 @@ func main() {
 				max, binary = state.Probability, state.BinaryString
 			}
 		}
+		if binary[0] == init {
+			sum += float64(i - last)
+			last = i
+			count++
+		}
 		fmt.Println(binary, max)
 	}
+	fmt.Println(sum / count)
 }
