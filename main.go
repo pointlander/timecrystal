@@ -13,11 +13,34 @@ import (
 )
 
 func main() {
+	inits := []string{
+		"0000",
+		"0001",
+		"0010",
+		"0011",
+		"0100",
+		"0101",
+		"0110",
+		"0111",
+		"1000",
+		"1001",
+		"1010",
+		"1011",
+		"1100",
+		"1101",
+		"1110",
+		"1111",
+	}
+	for _, init := range inits {
+		fmt.Println(init, findPeriod(init))
+	}
+}
+
+func findPeriod(init string) float64 {
 	rand.Seed(1)
 
 	qsim := q.New()
 
-	init := "0101"
 	q := []q.Qubit{}
 	for _, state := range init {
 		if state == '0' {
@@ -53,7 +76,7 @@ func main() {
 		qsim.CNOT(q[1], q[2])
 	}
 	sum, last, count := 0.0, -1, 0.0
-	for i := 0; i < 8; i++ {
+	for i := 0; i < 128; i++ {
 		period()
 		max, binary := 0.0, []string{}
 		for _, state := range qsim.State() {
@@ -66,7 +89,7 @@ func main() {
 			last = i
 			count++
 		}
-		fmt.Println(binary, max)
+		//fmt.Println(binary, max)
 	}
-	fmt.Println(sum / count)
+	return sum / count
 }
