@@ -62,7 +62,7 @@ func findPeriod(init string) float64 {
 		qsim.CNOT(q[2], q[3])
 
 		j := func() float64 {
-			return math.Pi * (1.0 + 3*rand.Float64()) / 8
+			return math.Pi * (1.0 + 2*rand.Float64()) / 8
 		}
 		qsim.RZ(-2*j(), q[1])
 		qsim.RZ(-2*j(), q[3])
