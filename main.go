@@ -37,7 +37,7 @@ func main() {
 }
 
 func findPeriod(init string) float64 {
-	rand.Seed(1)
+	rng := rand.New(rand.NewSource(1))
 
 	qsim := q.New()
 
@@ -62,7 +62,7 @@ func findPeriod(init string) float64 {
 		qsim.CNOT(q[2], q[3])
 
 		j := func() float64 {
-			return math.Pi * (1.0 + 2*rand.Float64()) / 8
+			return math.Pi * (1.0 + 2*rng.Float64()) / 8
 		}
 		qsim.RZ(-2*j(), q[1])
 		qsim.RZ(-2*j(), q[3])
@@ -78,13 +78,13 @@ func findPeriod(init string) float64 {
 	sum, last, count := 0.0, -1, 0.0
 	for i := 0; i < 128; i++ {
 		period()
-		max, binary := 0.0, []string{}
+		max, binary := 0.0, ""
 		for _, state := range qsim.State() {
-			if state.Probability > max {
-				max, binary = state.Probability, state.BinaryString
+			if state.Probability() > max {
+				max, binary = state.Probability(), state.BinaryString()
 			}
 		}
-		if binary[0] == init {
+		if binary == init {
 			sum += float64(i - last)
 			last = i
 			count++

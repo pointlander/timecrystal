@@ -1,5 +1,7 @@
 module github.com/pointlander/timecrystal
 
-go 1.16
+go 1.23
 
-require github.com/itsubaki/q v1.0.6-0.20211003051050-6b816c1b7981 // indirect
+toolchain go1.24.1
+
+require github.com/itsubaki/q v0.0.7-0.20250511144131-46863ea166dc // indirect
